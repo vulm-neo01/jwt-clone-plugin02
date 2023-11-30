@@ -3,7 +3,6 @@ local typedefs = require "kong.db.schema.typedefs"
 
 local PLUGIN_NAME = "jwt-clone2"
 
-
 local schema = {
   name = PLUGIN_NAME,
   fields = {
@@ -11,21 +10,50 @@ local schema = {
     { consumer = typedefs.no_consumer },  -- this plugin cannot be configured on a consumer (typical for auth plugins)
     { protocols = typedefs.protocols_http },
     { config = {
-        -- The 'config' record is the custom part of the plugin schema
         type = "record",
         fields = {
-          -- a standard defined field (typedef), with some customizations
-          { auth_header = typedefs.header_name {
-              required = true,
-              default = "Mini-Auth" } },
           {
-            auth_url = {
+            zone_id = {
+              description = "Zone identification",
               type = "string",
-              required = true,
-              default = "http://bttpbin.org/status/403"
+              default = "vn001",
+            },
+          },
+          {
+            network_type = {
+              description = "Network type defined here: Viettel, Vina, Mobifone,...",
+              type = "string",
+              default = "viettel",
+            },
+          },
+          {
+            lang = {
+              description = "Language can using",
+              type = "string",
+              default = "en",
+            },
+          },
+          {
+            verified_IPs = {
+              description = "List of Ip that can send request to system.",
+              type = "array",
+              elements = {
+                type = "string",
+              },
+              default = {"10.1.1.1"}
             }
           },
-        },
+          {
+            blocked_devices = {
+              description = "List of device is blocked",
+              type = "array",
+              elements = {
+                type = "string",
+              },
+              default = {"iphone"}
+            }
+          },
+        }
       },
     },
   },
